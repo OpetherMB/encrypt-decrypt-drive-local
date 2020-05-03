@@ -162,8 +162,8 @@ if __name__ == "__main__":
 
     subject = "crypted data from drive to you"
     body = "This is an email with attachment sent from Python"
-    sender_email = "maroubenm225@gmail.com"
-    receiver_email = "maroubenm@outlook.com"
+    sender_email = "******@gmail.com"
+    receiver_email = "*******@outlook.com"
     ### args
 
     send_email = True
