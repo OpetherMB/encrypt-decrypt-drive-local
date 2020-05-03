@@ -1,0 +1,8 @@
+client_secrets.json.json
+__pycache__/context.cpython-37.pyc
+__pycache__/context.cpython-38.pyc
+__pycache__/service.cpython-37.pyc
+__pycache__/service.cpython-38.pyc
+credentials/credentials.json
+pydrive/GUI.py
+.vscode
