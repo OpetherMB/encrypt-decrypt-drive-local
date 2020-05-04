@@ -84,9 +84,7 @@ def send_mail(sender_email, receiver_email, subject, password , output_file ):
         server.sendmail(sender_email, receiver_email, text)
 
 
-def Encryption_(destination_file, input_folder , key):
-
-      for File in os.listdir(input_folder):
+def encrypt_file(input_folder , destination_file, File, key):
 
           input_file = os.path.join(input_folder, File )
           output_file = os.path.join(destination_file, File.split('.txt')[0]+'.encrypted')
@@ -100,11 +98,29 @@ def Encryption_(destination_file, input_folder , key):
           with open(output_file, 'wb') as f:
               f.write(encrypted)
 
+          return output_file      
+
+
+
+def Encryption_(destination_file, input_folder , flag , FileWanted , key):
+
+    if flag :
+        output_file = encrypt_file(input_folder , destination_file, FileWanted, key)
+        return output_file
+
+
+    else :
+        for File in os.listdir(input_folder):
+            encrypt_file(input_folder , destination_file, File, key)
+        
+        return destination_file
+
+
 
 # You can delete input_file if you want
 # And then to decrypt a file:
 
-def TreatFile(destination_file, File, input_folder, key):
+def decryption_file(destination_file, File, input_folder, key):
     
          input_file =  os.path.join(destination_file, File )
          outp_ext = File.split('.encrypted')[0]+'.txt'
@@ -126,14 +142,14 @@ def Decryption_(destination_file, input_folder, FileWanted, password ,key , flag
       
       if flag : 
               
-              output_file = TreatFile(destination_file, FileWanted, input_folder, key)
+              output_file = decryption_file(destination_file, FileWanted, input_folder, key)
               send_mail(sender_email, receiver_email, subject, password , output_file)
               print("mail was sent...")
 
       else :
 
           for File in os.listdir(destination_file):
-              output_file = TreatFile(destination_file, File, input_folder, key)
+              output_file = decryption_file(destination_file, File, input_folder, key)
               send_mail(sender_email, receiver_email, subject, password , output_file)
               print("mail was sent...")
 
@@ -150,9 +166,9 @@ if __name__ == "__main__":
     parser.add_argument('--encrypt', required=True)
     parser.add_argument('--decrypt', required=True)
     parser.add_argument('--filewanted', required=True)
+
     
     args = parser.parse_args()
-
 
     ########
     
@@ -170,7 +186,9 @@ if __name__ == "__main__":
     encrypt = args.encrypt
     decrypt = args.decrypt
     FileWanted = args.filewanted
-
+    
+    flag = True
+    delete_local = True
     ###
 
     if send_email:
@@ -184,15 +202,16 @@ if __name__ == "__main__":
     try: 
         print("enter the key for encryption")
         key = getpass.getpass()
+
         key = bytes(key, encoding='utf-8')
+        print(key)
 
     except Exception as error:
         print('ERROR', error)
 
 
     if encrypt : 
-        Encryption_(destination_file, input_folder , key)
-
+        Encryption_(destination_file, input_folder , flag , FileWanted , key)
 
     if decrypt : 
         Decryption_(destination_file, input_folder,FileWanted , password, key, True ,send_mail) 
@@ -201,6 +220,7 @@ if __name__ == "__main__":
     key = " "
     password = " "
 
+    if delete_local : 
     # delete all data 
-    [ os.remove(os.path.join(input_folder , File) ) for File in os.listdir(input_folder) ]
+         [ os.remove(os.path.join(input_folder , File) ) for File in os.listdir(input_folder) ]
 

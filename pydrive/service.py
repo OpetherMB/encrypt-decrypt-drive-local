@@ -62,12 +62,19 @@ class DriveService:
 
 
     def upload_file(self, name, filePath, folder_id):
-        fileType = mimetypes.guess_type(filePath)[0]
+        extension=' '
         
-        if fileType == None:
-            raise NameError("Invalid type or missing suffix!")
+        fileType = mimetypes.guess_type(filePath)[0]
         if fileType == 'text/plain':
-            extension = 'txt'
+                extension = 'txt'
+                                
+        if fileType == None:
+           
+            if filePath.split('.')[1] == 'encrypted' :
+
+                    extension = '.encrypted'
+            else:
+                 raise NameError("Invalid type or missing suffix!")
 
 
         file_metadata = {
@@ -154,6 +161,9 @@ class DriveService:
         batch.execute()
 
         return 'https://drive.google.com/file/d/{0}/view?usp=sharing'.format(file_id)
+
+
+
 
     def get_file_info(self, file_id):
         fields = "kind,name,mimeType,description,parents,version,createdTime,modifiedTime,lastModifyingUser,size ,webContentLink "

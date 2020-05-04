@@ -7,11 +7,10 @@ import  os
 drive_service = service.DriveService(os.path.join('credentials','credentials.json') )
 drive_service.auth()
 
-name= 'marouane'
+name= 'cih maroc marouane'
 files = drive_service.list_files_by_name(name)
 
-# folder_id =files[0]['id']
-# drive_service.list_files_from_folder_id(folder_id=folder_id)
+
 print('\n')
 print(' ')
 
